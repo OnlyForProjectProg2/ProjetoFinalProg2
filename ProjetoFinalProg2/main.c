@@ -4,11 +4,14 @@
 
 #include "Functions/LeDisciEPreReqsParaMemoria.c"
 #include "Functions/LeAlunosParaMemoria.c"
+#include "Functions/OperacoesAlunosEmArquivo.c"
+
+void CadastroDeAlunos();
 
 int main(){
 	int q; 
-    DiscAndReqs * discAndReqs;
-    Alunos * alunos;
+    DiscAndReqs *discAndReqs;
+    Alunos *alunos;
 	discAndReqs = carregaDiscAndReqs();
 	alunos = carregaAlunos();
 	
@@ -21,7 +24,7 @@ int main(){
 		scanf ("%d",&q);
 		
 		if (q == 1){ //Cadastro de Alunos
-			return 1;
+			CadastroDeAlunos(alunos);
 		} else if (q==2){ // Consutar Disciplinas
 			return 2;
 		}
@@ -29,3 +32,38 @@ int main(){
 
 	return 0;
 }
+
+void CadastroDeAlunos(Alunos *alunos){
+	int ra;
+	char nome[255], usuario[255], senha[255];
+	printf("Cadastro de Alunos.\n");
+	printf("\nDigite o RA do aluno: ");
+	scanf("%d",&ra);getchar();
+	printf("\nDigite o Nome do aluno: ");
+	fgets(nome, 250, stdin);
+	strtok(nome, "\n");
+	printf("\nDigite o Login: ");
+	fgets(usuario, 250, stdin);
+	strtok(usuario, "\n");
+	printf("\nDigite a Senha: ");
+	fgets(senha, 250, stdin);
+	strtok(senha, "\n");
+	
+   	alunos->alunos[alunos->totalAlunos] = newAluno(ra, nome, usuario, senha);
+    alunos->totalAlunos++;
+	
+	//gravaAlunosArquivo(alunos); Implementar no arquivo de funções de alunos
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
