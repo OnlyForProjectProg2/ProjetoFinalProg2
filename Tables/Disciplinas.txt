@@ -1,5 +1,9 @@
-﻿[EB101,Cálculo I,6]
-[SI010,Estrutura de Dados II,4]
+﻿EB101
+Cálculo I
+6
+SI010
+Estrutura de Dados II
+4
 [SI102,Seminários I,2]
 [SI201,Estrutura de Dados I,4]
 [SI300,Programação Orientada a Objetos I,4]
