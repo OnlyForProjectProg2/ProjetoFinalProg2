@@ -1,42 +1,126 @@
-﻿[EB101,Cálculo I,6]
-[SI010,Estrutura de Dados II,4]
-[SI102,Seminários I,2]
-[SI201,Estrutura de Dados I,4]
-[SI300,Programação Orientada a Objetos I,4]
-[SI305,Análise de Sistemas de Informação I,4]
-[SI401,Programação para a Web,4]
-[SI405,Análise de Sistemas de Informação II,4]
-[SI703,Governança e Planejamento Estratégico de TI,2]
-[ST008,Metodologia do Trabalho Científico,2]
-[ST266,Engenharia de Software I,2]
-[ST567,Banco de Dados I,4]
-[ST765,Computação Gráfica,4]
-[TT060,Gestão de Projetos,4]
-[TT304,Sistemas Operacionais,4]
-[EB102,Geometria Analítica e Álgebra Linear,6]
-[SI100,Algoritmos e Programação de Computadores I,4]
-[SI200,Algoritmos e Programação de Computadores II,4]
-[SI202,Resolução de Problemas I,4]
-[SI304,Engenharia de Software II,4]
-[SI400,Programação Orientada a Objetos II,4]
-[SI404,Introdução a Interfaces Humano-Computador,2]
-[SI700,Programação para Dispositivos Móveis,4]
-[SI704,Seminários II,2]
-[SI800,Empreendedorismo e Inovação,2]
-[ST096,Ciência,Tecnologia e Sociedade,2]
-[ST562,Estrutura de Arquivos,4]
-[ST568,Redes de Comunicação I,4]
-[ST767,Banco de Dados II,4]
-[TT106,Organização e Arquitetura de Computadores,4]
-[TT350,Administração de Empresas,4]
-[SI902,Iniciação Científica II,10]
-[SI904,Iniciação Tecnológica II,10]
-[SI906,Monitoria II,5]
-[SI901,Iniciação Científica I,10]
-[SI903,Iniciação Tecnológica I,10]
-[SI905,Monitoria I,5]
-[SI909,Atividades Complementares,10]
-[SI912,Trabalho de Conclusão de Curso I,6]
-[SI914,Estágio em Computação I,6]
-[SI913,Trabalho de Conclusão de Curso II,6]
-[SI915,Estágio em Computação II,6]
+EB101
+Calculo I
+6
+SI010
+Estrutura de Dados II
+4
+SI102
+Seminarios I
+2
+SI201
+Estrutura de Dados I
+4
+SI300
+Programacao Orientada a Objetos I
+4
+SI305
+Analise de Sistemas de Informacao I
+4
+SI401
+Programacao para a Web
+4
+SI405
+Analise de Sistemas de Informacao II
+4
+SI703
+Governanca e Planejamento Estrategico de TI
+2
+ST008
+Metodologia do Trabalho Cientifico
+2
+ST266
+Engenharia de Software I
+2
+ST567
+Banco de Dados I
+4
+ST765
+Computacao Grafica
+4
+TT060
+Gestao de Projetos
+4
+TT304
+Sistemas Operacionais
+4
+EB102
+Geometria Analitica e Algebra Linear
+6
+SI100
+Algoritmos e Programacao de Computadores I
+4
+SI200
+Algoritmos e Programacao de Computadores II
+4
+SI202
+Resolucao de Problemas I
+4
+SI304
+Engenharia de Software II
+4
+SI400
+Programacao Orientada a Objetos II
+4
+SI404
+Introducao a Interfaces Humano-Computador
+2
+SI700
+Programacao para Dispositivos Moveis
+4
+SI704
+Seminarios II
+2
+SI800
+Empreendedorismo e Inovacao
+2
+ST096
+Ci�ncia,Tecnologia e Sociedade
+2
+ST562
+Estrutura de Arquivos
+4
+ST568
+Redes de Comunicacao I
+4
+ST767
+Banco de Dados II
+4
+TT106
+Organizacao e Arquitetura de Computadores
+4
+TT350
+Administracao de Empresas
+4
+SI902
+Iniciacao Cientifica II
+10
+SI904
+Iniciacao Tecnologica II
+10
+SI906
+Monitoria II
+5
+SI901
+Iniciacao Cientifica I
+10
+SI903
+Iniciacao Tecnologica I
+10
+SI905
+Monitoria I
+5
+SI909
+Atividades Complementares
+10
+SI912
+Trabalho de Conclusao de Curso I
+6
+SI914
+Estagio em Computacao I
+6
+SI913
+Trabalho de Conclusao de Curso II
+6
+SI915
+Estagio em Computacao II
+6
