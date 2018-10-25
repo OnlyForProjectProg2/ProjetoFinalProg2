@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define tableDisci "Tables/Disciplinas.txt"
+#define tableAlunos "Tables/Alunos.txt"
+#define tablePrereq "Tables/Prerequisitos.txt"
+
 #include "Functions/LeDisciEPreReqsParaMemoria.c"
 #include "Functions/LeAlunosParaMemoria.c"
 #include "Functions/Alunos.c"

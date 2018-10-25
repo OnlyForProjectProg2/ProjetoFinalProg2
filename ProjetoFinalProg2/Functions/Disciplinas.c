@@ -2,7 +2,7 @@ Disciplina *BuscaMateriaPelaSigla(char disciplina[5], DiscAndReqs *discAndReqs, 
 	char sigla[5], nome[100];
 	int credito;
 	int contador = 0;
-	FILE *fp = fopen("Tables/Disciplinas.txt", "r");
+	FILE *fp = fopen(tableDisci, "r");
 	
     while(contador<discAndReqs->totalDisci){
 		fscanf(fp,"%s\n",sigla);

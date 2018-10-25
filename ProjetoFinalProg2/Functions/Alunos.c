@@ -1,5 +1,5 @@
 void gravaAlunosArquivo(Alunos *alunos){
-    FILE *fp = fopen("Tables/Alunos.txt", "w");
+    FILE *fp = fopen(tableAlunos, "w");
     fprintf(fp,"%d\n",alunos->totalAlunos);
     
     for(int c=0;c<alunos->totalAlunos;c++){

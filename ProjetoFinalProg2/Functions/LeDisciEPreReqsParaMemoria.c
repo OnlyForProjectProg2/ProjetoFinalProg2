@@ -48,7 +48,7 @@ DiscAndReqs * carregaDiscAndReqs(){
 	char siglaRequisito[6];
 
     if(qtdDisciplinas > 0 || qtdPrereqs > 0){
-    	FILE *fp = fopen("Tables/Disciplinas.txt", "r");
+    	FILE *fp = fopen(tableDisci, "r");
         while(c1<qtdDisciplinas){
     		fscanf(fp,"%s\n",sigla);
     		fscanf(fp,"%[^\n]",nome);
@@ -58,7 +58,7 @@ DiscAndReqs * carregaDiscAndReqs(){
         }
         fclose(fp);
         
-    	FILE *fpreq = fopen("Tables/Prerequisitos.txt", "r");
+    	FILE *fpreq = fopen(tablePrereq, "r");
         while(c2<qtdPrereqs){
     		fscanf(fp,"%[^,],%s\n",siglaMateria,siglaRequisito);
     		

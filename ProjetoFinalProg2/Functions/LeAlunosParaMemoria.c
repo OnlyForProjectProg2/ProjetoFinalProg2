@@ -25,7 +25,7 @@ Alunos * carregaAlunos(){
 	char senha[255];
 	int ra, contador = 0;
 	
-	FILE *fp = fopen("Tables/Alunos.txt", "r");
+	FILE *fp = fopen(tableAlunos, "r");
 	fscanf(fp,"%d\n",&alunos->totalAlunos);
     while(contador<qtdDisciplinas){
 		fscanf(fp,"%d\n",&ra);
