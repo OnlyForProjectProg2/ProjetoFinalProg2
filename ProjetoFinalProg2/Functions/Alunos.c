@@ -38,14 +38,15 @@ AlunoLogado *validaLoginAluno(char *usuario, char *senha, AlunoLogado *alunoLoga
     	if(strcmp(usuario, usuarioBD) == 0 && strcmp(senha, senhaBD) == 0){
 			strcpy(alunoLogado->usuario, usuario);
 			strcpy(alunoLogado->senha, senha);
-    		printf("Logado\n");
-		}else{
-			printf("Nop\n");
 		}
-    	
-    	printf("[%d, %s, %s, %s]\n", raBD, nomeBD, usuarioBD, senhaBD);
+    	//printf("[%d, %s, %s, %s]\n", raBD, nomeBD, usuarioBD, senhaBD);
 	}
 	
-	return alunoLogado;
+	if(strcmp(alunoLogado->usuario, "0")!=0){
+		printf("\n\nLOGIN EFETUADO\n\n");
+	}else{
+		printf("\n\nUSUARIO OU SENHA INCORRETOS\n\n");
+	}
 	
+	return alunoLogado;	
 }

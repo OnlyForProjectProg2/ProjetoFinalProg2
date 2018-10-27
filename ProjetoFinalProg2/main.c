@@ -36,25 +36,27 @@ int main(){
 	
 		alunoLogado = validaLoginAluno(usuario, senha, alunoLogado);
 	}while(strcmp(alunoLogado->usuario, "0")==0);
-	/*
-	do {
-		fflush(stdin);
-		printf(" Opcao \n");
-		printf("1. Cadastro de Alunos \n");
-		printf("2. Consulta de Disciplinas \n");
-		printf("3. Realizar matricula \n");
-		printf("4. Sair \n");
-		scanf ("%d",&q);
-		
-		if (q == 1){ //Cadastro de Alunos
-			CadastroDeAlunos(alunos);
-		} else if (q==2){ // Consutar Disciplinas
-			ConsultarDisciplinas(discAndReqs);
-		} else if (q==3){
-			//RealizarMatricula(discAndReqs);
-		}
-	} while (q!=4);
-*/
+	
+	if(strcmp(alunoLogado->usuario, "0")!=0){	
+		do {
+			fflush(stdin);
+			printf(" Opcao \n");
+			printf("1. Cadastro de Alunos \n");
+			printf("2. Consulta de Disciplinas \n");
+			printf("3. Realizar matricula \n");
+			printf("4. Sair \n");
+			scanf ("%d",&q);
+			
+			if (q == 1){ //Cadastro de Alunos
+				CadastroDeAlunos(alunos);
+			} else if (q==2){ // Consutar Disciplinas
+				ConsultarDisciplinas(discAndReqs);
+			} else if (q==3){
+				//RealizarMatricula(discAndReqs);
+			}
+		} 
+		while (q!=4);
+	}
 	return 0;
 }
 
