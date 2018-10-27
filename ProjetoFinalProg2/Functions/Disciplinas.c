@@ -1,3 +1,11 @@
+typedef struct AlunosDisciplina{
+	int ra;
+	char sigla[6];
+	int semestre;
+	int nota;
+	int faltas;
+}AlunosDisciplina;
+
 Disciplina *BuscaMateriaPelaSigla(char disciplina[5], DiscAndReqs *discAndReqs, Disciplina *disciplinaFinal){
 	char sigla[5], nome[100];
 	int credito;

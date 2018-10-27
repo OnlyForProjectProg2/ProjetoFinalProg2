@@ -1,3 +1,14 @@
+typedef struct AlunoLogado{
+	char senha[255], usuario[255];
+}AlunoLogado;
+
+AlunoLogado *newAlunoLogado(char *usuario, char *senha){
+	AlunoLogado * aux = (AlunoLogado *)malloc(sizeof(AlunoLogado));
+    strcpy(aux->usuario,usuario);
+    strcpy(aux->senha,senha);
+    return aux;
+}
+
 void gravaAlunosArquivo(Alunos *alunos){
     FILE *fp = fopen(tableAlunos, "w");
     fprintf(fp,"%d\n",alunos->totalAlunos);
@@ -10,4 +21,31 @@ void gravaAlunosArquivo(Alunos *alunos){
 	}
 	fclose(fp);
 	printf("\n\nSalvo com sucesso!\n\n");
+}
+
+AlunoLogado *validaLoginAluno(char *usuario, char *senha, AlunoLogado *alunoLogado){
+    FILE *fp = fopen(tableAlunos, "r");
+    int top, raBD;
+    char nomeBD[255], usuarioBD[255], senhaBD[255];
+	fscanf(fp,"%d\n",&top);
+	
+	for(int v=0;v<top;v++){
+    	fscanf(fp,"%d\n",&raBD);
+    	fscanf(fp,"%[^\n]",nomeBD);
+    	fscanf(fp,"%s\n",usuarioBD);
+    	fscanf(fp,"%s\n",senhaBD);
+    	
+    	if(strcmp(usuario, usuarioBD) == 0 && strcmp(senha, senhaBD) == 0){
+			strcpy(alunoLogado->usuario, usuario);
+			strcpy(alunoLogado->senha, senha);
+    		printf("Logado\n");
+		}else{
+			printf("Nop\n");
+		}
+    	
+    	printf("[%d, %s, %s, %s]\n", raBD, nomeBD, usuarioBD, senhaBD);
+	}
+	
+	return alunoLogado;
+	
 }

@@ -5,27 +5,44 @@
 #define tableDisci "Tables/Disciplinas.txt"
 #define tableAlunos "Tables/Alunos.txt"
 #define tablePrereq "Tables/Prerequisitos.txt"
+#define tableAlunosDisciplinas "Tables/AlunosDisciplinas.txt"
 
 #include "Functions/LeDisciEPreReqsParaMemoria.c"
 #include "Functions/LeAlunosParaMemoria.c"
 #include "Functions/Alunos.c"
 #include "Functions/Disciplinas.c"
+#include "Functions/Prerequisitos.c"
 
 void CadastroDeAlunos(Alunos *alunos);
-void ConsultarDisciplinas();
+void ConsultarDisciplinas(DiscAndReqs *discAndReqs);
+void RealizarMatricula(DiscAndReqs *discAndReqs);
 
 int main(){
-	int q; 
+	int q;
+	char senha[255], usuario[255]; 
+	AlunoLogado *alunoLogado = newAlunoLogado("0", "");
     DiscAndReqs *discAndReqs;
     Alunos *alunos;
 	discAndReqs = carregaDiscAndReqs();
 	alunos = carregaAlunos();
 	
+	do{
+		printf("Usuario: ");
+		fgets(usuario, 250, stdin);
+		strtok(usuario, "\n");
+		printf("Senha: ");
+		fgets(senha, 250, stdin);
+		strtok(senha, "\n");
+	
+		alunoLogado = validaLoginAluno(usuario, senha, alunoLogado);
+	}while(strcmp(alunoLogado->usuario, "0")==0);
+	/*
 	do {
 		fflush(stdin);
 		printf(" Opcao \n");
 		printf("1. Cadastro de Alunos \n");
 		printf("2. Consulta de Disciplinas \n");
+		printf("3. Realizar matricula \n");
 		printf("4. Sair \n");
 		scanf ("%d",&q);
 		
@@ -33,9 +50,11 @@ int main(){
 			CadastroDeAlunos(alunos);
 		} else if (q==2){ // Consutar Disciplinas
 			ConsultarDisciplinas(discAndReqs);
+		} else if (q==3){
+			//RealizarMatricula(discAndReqs);
 		}
 	} while (q!=4);
-
+*/
 	return 0;
 }
 
@@ -91,8 +110,45 @@ void ConsultarDisciplinas(DiscAndReqs *discAndReqs){
 		printf("\n\nDISCIPLINA DIGITADA INVALIDA.\n\n");
 	}
 }
-
-
+/*
+void RealizarMatricula(DiscAndReqs *discAndReqs){
+	FILE *fp = fopen(tableAlunosDisciplinas, "r");
+	int semestre, startSemestre=1, top;
+	char discDigitada[6];
+	
+	AlunosDisciplina * alunosDisciplina;
+	fscanf(fp,"%d\n",&top);
+	
+	printf("Para sair, digite XX000\n");
+	printf("Digite o semestre: ");
+	scanf("%d", &semestre);
+	
+	printf("Digite a disciplina: ");
+	scanf("%s", &discDigitada);
+	
+	Prereqs *requisitos = buscaPrerequisitosPorMatricula(discDigitada, discAndReqs);
+	
+	if(requisitos->qtdReqs == 0){
+		efetuaMatricula() // PAREI AQUI POIS VEIO A NECESSIDADE DE REALIZAR O LOGIN PRIMEIRO
+	}
+	/*
+	for(int y=0;y<=requisitos->qtdReqs;y++){
+		for(int t=0;t<top;t++){
+			if(semestre>0){
+				fscanf(fp,"%d,",&alunosDisciplina->ra);
+				fscanf(fp,"%[^,]",alunosDisciplina->sigla);
+				fscanf(fp,"%d,",semestre);
+				fscanf(fp,"%d,",nota);
+				fscanf(fp,"%d",faltas);
+			}
+			
+		}
+	}
+	
+	for(int v=0;v<requisitos->qtdReqs;v++){
+		printf("[%s]\n", requisitos->reqs[v]->sigla);
+	}
+}*/
 
 
 
