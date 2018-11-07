@@ -1,14 +1,3 @@
-typedef struct AlunoLogado{
-	char senha[255], usuario[255];
-}AlunoLogado;
-
-AlunoLogado *newAlunoLogado(char *usuario, char *senha){
-	AlunoLogado * aux = (AlunoLogado *)malloc(sizeof(AlunoLogado));
-    strcpy(aux->usuario,usuario);
-    strcpy(aux->senha,senha);
-    return aux;
-}
-
 void gravaAlunosArquivo(Alunos *alunos){
     FILE *fp = fopen(tableAlunos, "w");
     fprintf(fp,"%d\n",alunos->totalAlunos);
@@ -36,6 +25,7 @@ AlunoLogado *validaLoginAluno(char *usuario, char *senha, AlunoLogado *alunoLoga
     	fscanf(fp,"%s\n",senhaBD);
     	
     	if(strcmp(usuario, usuarioBD) == 0 && strcmp(senha, senhaBD) == 0){
+    		alunoLogado->ra = raBD;
 			strcpy(alunoLogado->usuario, usuario);
 			strcpy(alunoLogado->senha, senha);
 		}
@@ -48,5 +38,6 @@ AlunoLogado *validaLoginAluno(char *usuario, char *senha, AlunoLogado *alunoLoga
 		printf("\n\nUSUARIO OU SENHA INCORRETOS\n\n");
 	}
 	
+	fclose(fp);
 	return alunoLogado;	
 }

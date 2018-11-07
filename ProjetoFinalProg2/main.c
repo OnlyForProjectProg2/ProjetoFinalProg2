@@ -7,24 +7,113 @@
 #define tablePrereq "Tables/Prerequisitos.txt"
 #define tableAlunosDisciplinas "Tables/AlunosDisciplinas.txt"
 
+#define qtdDisciplinas 42
+#define qtdPrereqs 47
+
+///////////////////////////////////////////////////
+typedef struct Disciplina{
+	char sigla[6];
+	char nome[100];
+	int credito;
+}Disciplina;
+
+Disciplina * newDisciplina(char * sigla, char * nome, int credito){
+    Disciplina * aux = (Disciplina *)malloc(sizeof(Disciplina));
+    strcpy(aux->sigla,sigla);
+    strcpy(aux->nome,nome);
+    aux->credito = credito;
+    return aux;
+}
+
+typedef struct Prerequisito{
+	char siglaMateria[6];
+	char siglaRequisito[6];
+}Prerequisito;
+
+Prerequisito * newPrerequisito(char * siglaMateria, char * siglaRequisito){
+    Prerequisito * aux = (Prerequisito *)malloc(sizeof(Prerequisito));
+    strcpy(aux->siglaMateria,siglaMateria);
+    strcpy(aux->siglaRequisito,siglaRequisito);
+    
+    return aux;
+}
+
+typedef struct DiscAndReqs{
+	Disciplina * disciplinas[qtdDisciplinas];//conferir quantidade de disciplinas
+	Prerequisito * prerequisitos[qtdPrereqs];//conferir a quantidade de prerequisitos
+	int totalDisci, totalPrereq;
+}DiscAndReqs;
+
+typedef struct AlunoLogado{
+	char senha[255], usuario[255];
+	int ra;
+}AlunoLogado;
+
+AlunoLogado *newAlunoLogado(char *usuario, char *senha, int ra){
+	AlunoLogado * aux = (AlunoLogado *)malloc(sizeof(AlunoLogado));
+	aux->ra = ra;
+    strcpy(aux->usuario,usuario);
+    strcpy(aux->senha,senha);
+    return aux;
+}
+typedef struct AlunosDisciplina{
+	int ra;
+	char sigla[6];
+	int semestre;
+	int nota;
+	int faltas;
+}AlunosDisciplina;
+
+AlunosDisciplina *newAlunosDisciplina(int ra, char *sigla, int sem, int nota, int faltas){
+    AlunosDisciplina * aux = (AlunosDisciplina *)malloc(sizeof(AlunosDisciplina));
+    aux->ra = ra;
+    strcpy(aux->sigla, sigla);
+    aux->semestre = sem;
+    aux->nota = nota;
+    aux->faltas = faltas;
+    return aux;
+}
+
+typedef struct AllAlunosDisc{
+	AlunosDisciplina *alunosDisciplinas[100];
+	int total;
+}AllAlunosDisc;
+
+typedef struct Sigla{
+	char sigla[6];
+}Sigla;
+
+Sigla *newSigla(char *sigla){
+    Sigla * aux = (Sigla *)malloc(sizeof(Sigla));
+    strcpy(aux->sigla, sigla);
+    return aux;
+}
+
+typedef struct Prereqs{
+	Sigla *reqs[5];
+	int qtdReqs;
+}Prereqs;
+
+////////////////////////////////////////////////////
+
 #include "Functions/LeDisciEPreReqsParaMemoria.c"
 #include "Functions/LeAlunosParaMemoria.c"
 #include "Functions/Alunos.c"
-#include "Functions/Disciplinas.c"
 #include "Functions/Prerequisitos.c"
+#include "Functions/Disciplinas.c"
 
 void CadastroDeAlunos(Alunos *alunos);
 void ConsultarDisciplinas(DiscAndReqs *discAndReqs);
-void RealizarMatricula(DiscAndReqs *discAndReqs);
+void RealizarMatricula(DiscAndReqs *discAndReqs, AlunoLogado *alunoLogado, AllAlunosDisc *allAlunosDisc);
 
 int main(){
 	int q;
 	char senha[255], usuario[255]; 
-	AlunoLogado *alunoLogado = newAlunoLogado("0", "");
-    DiscAndReqs *discAndReqs;
-    Alunos *alunos;
-	discAndReqs = carregaDiscAndReqs();
-	alunos = carregaAlunos();
+	AlunoLogado *alunoLogado = newAlunoLogado("0", "", 0);
+	
+    DiscAndReqs *discAndReqs = carregaDiscAndReqs();
+    Alunos *alunos = carregaAlunos();
+    AllAlunosDisc *allAlunosDisc = carregaAllAlunosDisc();
 	
 	do{
 		printf("Usuario: ");
@@ -52,7 +141,7 @@ int main(){
 			} else if (q==2){ // Consutar Disciplinas
 				ConsultarDisciplinas(discAndReqs);
 			} else if (q==3){
-				//RealizarMatricula(discAndReqs);
+				RealizarMatricula(discAndReqs, alunoLogado, allAlunosDisc);
 			}
 		} 
 		while (q!=4);
@@ -112,45 +201,99 @@ void ConsultarDisciplinas(DiscAndReqs *discAndReqs){
 		printf("\n\nDISCIPLINA DIGITADA INVALIDA.\n\n");
 	}
 }
-/*
-void RealizarMatricula(DiscAndReqs *discAndReqs){
-	FILE *fp = fopen(tableAlunosDisciplinas, "r");
-	int semestre, startSemestre=1, top;
+
+void RealizarMatricula(DiscAndReqs *discAndReqs, AlunoLogado *alunoLogado, AllAlunosDisc *allAlunosDisc){
+	Disciplina *disciplinaFinal, *disciplinasParaValidar[16], *disciplinasParaSalvar[16], *disciplinasSalvas[16], *disciplinasNaoSalvas[16];
 	char discDigitada[6];
-	
-	AlunosDisciplina * alunosDisciplina;
-	fscanf(fp,"%d\n",&top);
+	int c = 0, cToSave = 0, cToNoSave = 0, veSeCumpriuReqs = 0, semestreOk = 0, semestreAtual, semestre, somaCreditos = 0;
 	
 	printf("Para sair, digite XX000\n");
-	printf("Digite o semestre: ");
-	scanf("%d", &semestre);
 	
-	printf("Digite a disciplina: ");
-	scanf("%s", &discDigitada);
+	semestreAtual = verificaUltimoSemestreRegistrado(alunoLogado->ra, allAlunosDisc);
+	do{
+		//printf("Semestre Atual: %d\n", semestreAtual);
+		printf("Digite o semestre: ");
+		scanf("%d", &semestre);
+		if(semestre <= semestreAtual){
+			printf("\n\nO SEMESTRE DIGITADO NAO CONDIZ COM O SEMESTRE MAIS ATUAL REGISTRADO NA BASE!\n");
+		}else{
+			semestreOk = 1;
+		}
+	}while(semestreOk == 0);
+	   
+	do{
+		disciplinaFinal = newDisciplina("", "", 0); //começa vazia para ser preenchida depois
+		printf("Digite a disciplina: ");
+		scanf("%s", &discDigitada);
+		
+		if(strcmp(discDigitada, "XX000") != 0){
+			//VERIFICA PRIMEIRO SE A DISCIPLINA DIGITADA REALMENTE EXISTE
+			disciplinaFinal = BuscaMateriaPelaSigla(discDigitada, discAndReqs, disciplinaFinal);
+			if(disciplinaFinal->credito > 0){
+				disciplinasParaValidar[c] = newDisciplina(disciplinaFinal->sigla, disciplinaFinal->nome, disciplinaFinal->credito);
+				somaCreditos += disciplinaFinal->credito;
+				c++;
+			}else{
+				printf("\n\nA DISCIPLINA DIGITADA NAO EXISTE!\n");
+			}	
+		}
+	}while(strcmp(discDigitada, "XX000") != 0);
 	
-	Prereqs *requisitos = buscaPrerequisitosPorMatricula(discDigitada, discAndReqs);
-	
-	if(requisitos->qtdReqs == 0){
-		efetuaMatricula() // PAREI AQUI POIS VEIO A NECESSIDADE DE REALIZAR O LOGIN PRIMEIRO
-	}
-	/*
-	for(int y=0;y<=requisitos->qtdReqs;y++){
-		for(int t=0;t<top;t++){
-			if(semestre>0){
-				fscanf(fp,"%d,",&alunosDisciplina->ra);
-				fscanf(fp,"%[^,]",alunosDisciplina->sigla);
-				fscanf(fp,"%d,",semestre);
-				fscanf(fp,"%d,",nota);
-				fscanf(fp,"%d",faltas);
-			}
+	if(somaCreditos > 32){
+		printf("\n\nA SOMA DOS CREDITOS DAS MATERIAS DIGITADAS E SUPERIOR A 32, NENHUMA MATERIA FOI SALVA!\n");
+	}else{
+		printf("\n\n");
+		for(int t=0;t<c;t++){
+			//APROVEITA O LOOP PARA JA VERIFICAR OS REQUISITOS DAS MATERIAS
+			//printf("parou aqui, quantidade de reqs: \n");
+			Prereqs *requisitos = buscaPrerequisitosPorSigla(disciplinasParaValidar[t]->sigla, discAndReqs);
+			//valida se a materia ja foi cursada anteriormente
+			int validaJaFeita = buscaSeJaCursouDisciplina(disciplinasParaValidar[t]->sigla, allAlunosDisc, alunoLogado->ra);
 			
+			if(validaJaFeita == 0){
+				if(requisitos->qtdReqs == 0){
+					disciplinasParaSalvar[cToSave] = newDisciplina(disciplinasParaValidar[t]->sigla, disciplinasParaValidar[t]->nome, disciplinasParaValidar[t]->credito);
+					printf("* Salvando Matricula na Disciplina %s.\n", disciplinasParaSalvar[cToSave]->sigla);
+					cToSave++;
+				}else if(requisitos->qtdReqs > 0){
+					veSeCumpriuReqs = verificaSeAlunoCumpriuRequisitosPorSigla(alunoLogado ,requisitos, allAlunosDisc); 
+					//printf("\n-Cumpriu: %d\n", veSeCumpriuReqs);
+					
+					if(veSeCumpriuReqs == 1){
+						disciplinasParaSalvar[cToSave] = newDisciplina(disciplinasParaValidar[t]->sigla, disciplinasParaValidar[t]->nome, disciplinasParaValidar[t]->credito);
+						printf("* Salvando Matricula na Disciplina %s.\n", disciplinasParaSalvar[cToSave]->sigla);
+						cToSave++;
+					}else{
+						disciplinasNaoSalvas[cToNoSave] = newDisciplina(disciplinasParaValidar[t]->sigla, disciplinasParaValidar[t]->nome, disciplinasParaValidar[t]->credito);
+						printf("* Erro -> Voce nao possui 1 ou mais do requisitos da %s concluidos.\n", disciplinasNaoSalvas[cToNoSave]->sigla);
+						cToNoSave++;
+					}
+				}
+			}else{
+				disciplinasNaoSalvas[cToNoSave] = newDisciplina(disciplinasParaValidar[t]->sigla, disciplinasParaValidar[t]->nome, disciplinasParaValidar[t]->credito);
+				printf("* Erro -> Voce ja cursou essa Disciplina.\n", disciplinasNaoSalvas[cToNoSave]->sigla);
+				cToNoSave++;
+			}
 		}
 	}
 	
-	for(int v=0;v<requisitos->qtdReqs;v++){
-		printf("[%s]\n", requisitos->reqs[v]->sigla);
+	for(int h=0;h<cToSave;h++){
+		allAlunosDisc->alunosDisciplinas[allAlunosDisc->total] = newAlunosDisciplina(alunoLogado->ra, disciplinasParaSalvar[h]->sigla, semestre, 0, 0);
+		allAlunosDisc->total++;
 	}
-}*/
+	/*
+	for(int u=0;u<allAlunosDisc->total;u++){
+		printf("[%s]", allAlunosDisc->alunosDisciplinas[u]->sigla);
+	}*/
+	
+	
+	if(cToSave >= 1){
+		efetuaMatricula(allAlunosDisc);
+	}else{
+		printf("\n\nNENHUMA MATERIA FOI SALVA.\n");
+	}
+	
+}
 
 
 

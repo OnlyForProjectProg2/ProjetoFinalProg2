@@ -1,39 +1,3 @@
-#define qtdDisciplinas 42
-#define qtdPrereqs 47
-
-typedef struct Disciplina{
-	char sigla[6];
-	char nome[100];
-	int credito;
-}Disciplina;
-
-Disciplina * newDisciplina(char * sigla, char * nome, int credito){
-    Disciplina * aux = (Disciplina *)malloc(sizeof(Disciplina));
-    strcpy(aux->sigla,sigla);
-    strcpy(aux->nome,nome);
-    aux->credito = credito;
-    return aux;
-}
-
-typedef struct Prerequisito{
-	char siglaMateria[6];
-	char siglaRequisito[6];
-}Prerequisito;
-
-Prerequisito * newPrerequisito(char * siglaMateria, char * siglaRequisito){
-    Prerequisito * aux = (Prerequisito *)malloc(sizeof(Prerequisito));
-    strcpy(aux->siglaMateria,siglaMateria);
-    strcpy(aux->siglaRequisito,siglaRequisito);
-    
-    return aux;
-}
-
-typedef struct DiscAndReqs{
-	Disciplina * disciplinas[qtdDisciplinas];//conferir quantidade de disciplinas
-	Prerequisito * prerequisitos[qtdPrereqs];//conferir a quantidade de prerequisitos
-	int totalDisci, totalPrereq;
-}DiscAndReqs;
-
 DiscAndReqs * carregaDiscAndReqs(){
     DiscAndReqs * discAndReqs = (DiscAndReqs *)malloc(sizeof(DiscAndReqs));
     

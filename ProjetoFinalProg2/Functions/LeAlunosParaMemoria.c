@@ -27,7 +27,7 @@ Alunos * carregaAlunos(){
 	
 	FILE *fp = fopen(tableAlunos, "r");
 	fscanf(fp,"%d\n",&alunos->totalAlunos);
-    while(contador<qtdDisciplinas){
+    while(contador<alunos->totalAlunos){
 		fscanf(fp,"%d\n",&ra);
 		fscanf(fp,"%[^\n]",nome);
 		fscanf(fp,"%s\n",usuario);
