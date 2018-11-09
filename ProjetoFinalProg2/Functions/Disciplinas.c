@@ -26,7 +26,8 @@ Disciplina *BuscaMateriaPelaSigla(char disciplina[5], DiscAndReqs *discAndReqs, 
 
 AllAlunosDisc *buscaMatriculasRegistradas(int ra, char *discDigitada, int semestre){
     AllAlunosDisc * all = (AllAlunosDisc *)malloc(sizeof(AllAlunosDisc));
-	int raF, semestreF, notaF, faltasF;
+	int raF, semestreF;
+	float notaF, faltasF;
 	char siglaF[6];
 	int top;
 	
@@ -37,8 +38,8 @@ AllAlunosDisc *buscaMatriculasRegistradas(int ra, char *discDigitada, int semest
 		fscanf(fp, "%d[^,]", &raF);
 		fscanf(fp, ",%[^,]", siglaF);
 		fscanf(fp, ",%d", &semestreF);
-		fscanf(fp, ",%d", &notaF);
-		fscanf(fp, ",%d\n", &faltasF);
+		fscanf(fp, ",%f", &notaF);
+		fscanf(fp, ",%f\n", &faltasF);
 		
 		all->alunosDisciplinas[tmp] = newAlunosDisciplina(raF, siglaF, semestreF, notaF, faltasF);
 	}
@@ -55,7 +56,7 @@ void registraMatriculasAtualizadas(AllAlunosDisc *alll){
     
     for(int c=0;c<=alll->total;c++){
     	//printf("%d\n%s\n%d\n%d\n%d\n",alll->alunosDisciplinas[c]->ra, alll->alunosDisciplinas[c]->sigla, alll->alunosDisciplinas[c]->semestre, alll->alunosDisciplinas[c]->nota, alll->alunosDisciplinas[c]->faltas);
-    	fprintf(fp,"%d,%s,%d,%d,%d\n",alll->alunosDisciplinas[c]->ra, alll->alunosDisciplinas[c]->sigla, alll->alunosDisciplinas[c]->semestre, alll->alunosDisciplinas[c]->nota, alll->alunosDisciplinas[c]->faltas);
+    	fprintf(fp,"%d,%s,%d,%f,%f\n",alll->alunosDisciplinas[c]->ra, alll->alunosDisciplinas[c]->sigla, alll->alunosDisciplinas[c]->semestre, alll->alunosDisciplinas[c]->nota, alll->alunosDisciplinas[c]->faltas);
 	}
 	fclose(fp);
 	printf("\n\nSalvo com sucesso!\n\n");
@@ -63,14 +64,15 @@ void registraMatriculasAtualizadas(AllAlunosDisc *alll){
 
 AllAlunosDisc * carregaAllAlunosDisc(){
     AllAlunosDisc * allAlunosDisc = (AllAlunosDisc *)malloc(sizeof(AllAlunosDisc));    
-    int ra, semestre, nota, faltas, contador=0;
+    int ra, semestre, contador=0;
+    float nota, faltas;
 	char sigla[6];
 	
 	FILE *fp = fopen(tableAlunosDisciplinas, "r");
 	fscanf(fp,"%d\n",&allAlunosDisc->total);
 	//printf("Total: %d\n", allAlunosDisc->total);
     while(contador<allAlunosDisc->total){
-		fscanf(fp,"%d,%[^,],%d,%d,%d\n", &ra, sigla, &semestre, &nota, &faltas);
+		fscanf(fp,"%d,%[^,],%d,%f,%f\n", &ra, sigla, &semestre, &nota, &faltas);
        	allAlunosDisc->alunosDisciplinas[contador] = newAlunosDisciplina(ra, sigla, semestre, nota, faltas);
         
         //printf("[%d, %s, %d, %d, %d]\n", ra, sigla, semestre, nota, faltas);
@@ -123,14 +125,55 @@ int verificaSeAlunoCumpriuRequisitosPorSigla(AlunoLogado *alunoLogado, Prereqs *
 	}
 }
 
-void efetuaMatricula(AllAlunosDisc *allAlunosDisc){
+void efetuaMatriculaOuAlteracao(AllAlunosDisc *allAlunosDisc){
     FILE *fp = fopen(tableAlunosDisciplinas, "w");
     fprintf(fp,"%d\n", allAlunosDisc->total);
     
 	for(int u=0;u<allAlunosDisc->total;u++){
-		fprintf(fp,"%d,%s,%d,%d,%d\n", allAlunosDisc->alunosDisciplinas[u]->ra, allAlunosDisc->alunosDisciplinas[u]->sigla, allAlunosDisc->alunosDisciplinas[u]->semestre, 0, 0);
+
+			fprintf(fp,"%d,%s,%d,%f,%f\n", allAlunosDisc->alunosDisciplinas[u]->ra, allAlunosDisc->alunosDisciplinas[u]->sigla, allAlunosDisc->alunosDisciplinas[u]->semestre, allAlunosDisc->alunosDisciplinas[u]->nota, allAlunosDisc->alunosDisciplinas[u]->faltas);	
 	}
 	fclose(fp);
 	printf("\n\nMATRICULA REALIZADA COM SUCESSO\n");
 	
+}
+
+void printaSituacaoNotasAluno(int semestre, int ra, AllAlunosDisc *allAlunosDisc, DiscAndReqs *discAndReqs){
+	Disciplina *disciplinaFinal = newDisciplina("", "", 0);//começa vazia para ser preenchida depois
+		printf("\n\n");
+			
+	for(int j=0;j<allAlunosDisc->total;j++){
+		if(allAlunosDisc->alunosDisciplinas[j]->ra == ra && allAlunosDisc->alunosDisciplinas[j]->semestre == semestre){
+			disciplinaFinal = BuscaMateriaPelaSigla(allAlunosDisc->alunosDisciplinas[j]->sigla, discAndReqs, disciplinaFinal);
+			printf("%s - %s - Nota: %f - Falta: %f\n", allAlunosDisc->alunosDisciplinas[j]->sigla, disciplinaFinal->nome, allAlunosDisc->alunosDisciplinas[j]->nota, allAlunosDisc->alunosDisciplinas[j]->faltas);
+		}
+	}
+}
+
+int verificaDisciplinaExisteNoSemestre(int semestre, char *discDigitada, AllAlunosDisc *allAlunosDisc){
+	for(int k=0;k<allAlunosDisc->total;k++){
+		if(strcmp(allAlunosDisc->alunosDisciplinas[k]->sigla, discDigitada) == 0 && (allAlunosDisc->alunosDisciplinas[k]->semestre == semestre)){
+			return 1;
+		}
+	}
+	
+	return 0;
+}
+
+void efetuaAlteracaoESalvaArquivo(int semestre, char *discDigitada, AllAlunosDisc *allAlunosDisc, float nota, float falta, int ra){
+	for(int k=0;k<allAlunosDisc->total;k++){
+		if(strcmp(allAlunosDisc->alunosDisciplinas[k]->sigla, discDigitada) == 0 && (allAlunosDisc->alunosDisciplinas[k]->semestre == semestre) && (allAlunosDisc->alunosDisciplinas[k]->ra == ra)){
+			allAlunosDisc->alunosDisciplinas[k]->nota = nota;
+			allAlunosDisc->alunosDisciplinas[k]->faltas = falta;
+			
+			printf("[%s, %f, %f]\n", allAlunosDisc->alunosDisciplinas[k]->sigla, allAlunosDisc->alunosDisciplinas[k]->nota, allAlunosDisc->alunosDisciplinas[k]->faltas);
+			break;
+		}
+	}	
+	
+	for(int k=0;k<allAlunosDisc->total;k++){
+		printf("[%s, %f, %f]\n", allAlunosDisc->alunosDisciplinas[k]->sigla, allAlunosDisc->alunosDisciplinas[k]->nota, allAlunosDisc->alunosDisciplinas[k]->faltas);
+	}
+	
+	efetuaMatriculaOuAlteracao(allAlunosDisc);
 }

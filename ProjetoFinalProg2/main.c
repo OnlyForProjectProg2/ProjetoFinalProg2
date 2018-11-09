@@ -60,11 +60,11 @@ typedef struct AlunosDisciplina{
 	int ra;
 	char sigla[6];
 	int semestre;
-	int nota;
-	int faltas;
+	float nota;
+	float faltas;
 }AlunosDisciplina;
 
-AlunosDisciplina *newAlunosDisciplina(int ra, char *sigla, int sem, int nota, int faltas){
+AlunosDisciplina *newAlunosDisciplina(int ra, char *sigla, int sem, float nota, float faltas){
     AlunosDisciplina * aux = (AlunosDisciplina *)malloc(sizeof(AlunosDisciplina));
     aux->ra = ra;
     strcpy(aux->sigla, sigla);
@@ -105,6 +105,7 @@ typedef struct Prereqs{
 void CadastroDeAlunos(Alunos *alunos);
 void ConsultarDisciplinas(DiscAndReqs *discAndReqs);
 void RealizarMatricula(DiscAndReqs *discAndReqs, AlunoLogado *alunoLogado, AllAlunosDisc *allAlunosDisc);
+void AtualizaNotaFalta(AlunoLogado *alunoLogado, AllAlunosDisc *allAlunosDisc, DiscAndReqs *discAndReqs);
 
 int main(){
 	int q;
@@ -133,7 +134,8 @@ int main(){
 			printf("1. Cadastro de Alunos \n");
 			printf("2. Consulta de Disciplinas \n");
 			printf("3. Realizar matricula \n");
-			printf("4. Sair \n");
+			printf("4. Atualizar Nota e Falta \n");
+			printf("5. Sair \n");
 			scanf ("%d",&q);
 			
 			if (q == 1){ //Cadastro de Alunos
@@ -142,9 +144,11 @@ int main(){
 				ConsultarDisciplinas(discAndReqs);
 			} else if (q==3){
 				RealizarMatricula(discAndReqs, alunoLogado, allAlunosDisc);
+			}else if (q==4){
+				AtualizaNotaFalta(alunoLogado, allAlunosDisc, discAndReqs);
 			}
 		} 
-		while (q!=4);
+		while (q!=5);
 	}
 	return 0;
 }
@@ -196,6 +200,7 @@ void ConsultarDisciplinas(DiscAndReqs *discAndReqs){
 			}
 			c++;
 		}
+		if(avaliador == 0){ printf("\t ESSA MATERIA NAO POSSUI PRE-REQUISITOS.");	}
 		printf("\n\n");	
 	}else{
 		printf("\n\nDISCIPLINA DIGITADA INVALIDA.\n\n");
@@ -214,6 +219,7 @@ void RealizarMatricula(DiscAndReqs *discAndReqs, AlunoLogado *alunoLogado, AllAl
 		//printf("Semestre Atual: %d\n", semestreAtual);
 		printf("Digite o semestre: ");
 		scanf("%d", &semestre);
+		
 		if(semestre <= semestreAtual){
 			printf("\n\nO SEMESTRE DIGITADO NAO CONDIZ COM O SEMESTRE MAIS ATUAL REGISTRADO NA BASE!\n");
 		}else{
@@ -288,13 +294,46 @@ void RealizarMatricula(DiscAndReqs *discAndReqs, AlunoLogado *alunoLogado, AllAl
 	
 	
 	if(cToSave >= 1){
-		efetuaMatricula(allAlunosDisc);
+		efetuaMatriculaOuAlteracao(allAlunosDisc);
 	}else{
 		printf("\n\nNENHUMA MATERIA FOI SALVA.\n");
 	}
 	
 }
 
+void AtualizaNotaFalta(AlunoLogado *alunoLogado, AllAlunosDisc *allAlunosDisc, DiscAndReqs *discAndReqs){
+	int semestre;
+	float nota, falta;
+	char discDigitada[5];
+	
+	printf("Digite o semestre: ");
+	scanf("%d", &semestre);
+	
+	printaSituacaoNotasAluno(semestre, alunoLogado->ra, allAlunosDisc, discAndReqs);
+	
+	do{
+		printf("\nDIGITE O CODIGO DA DISCIPLINA PARA REALIZAR A ALTERACAO: ");
+		scanf("%s", discDigitada);
+		if(strcmp(discDigitada, "XX000") != 0){
+			if((verificaDisciplinaExisteNoSemestre(semestre, discDigitada, allAlunosDisc)) == 1){
+				printf("Nota: ");
+				scanf("%f", &nota);
+				printf("Falta (%): ");
+				scanf("%f", &falta);
+				
+				if((nota >10 || nota <0) || (falta >100 || falta <0)){
+					printf("\nNOTA E FALTA DEVEM SER DE 0 A 10 E 0 A 100, RESPECTIVAMENTE\n");
+				}else{
+					efetuaAlteracaoESalvaArquivo(semestre, discDigitada, allAlunosDisc, nota, falta, alunoLogado->ra);
+					printaSituacaoNotasAluno(semestre, alunoLogado->ra, allAlunosDisc, discAndReqs);
+						
+				}	
+			}else{
+				printf("\nMATRICULA NAO ENCONTRADA NO SEMESTRE DIGITADO.\n");
+			}
+		}
+	}while(strcmp(discDigitada, "XX000") != 0);
+}
 
 
 
