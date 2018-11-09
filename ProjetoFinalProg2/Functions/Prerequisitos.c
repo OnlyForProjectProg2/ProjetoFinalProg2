@@ -28,7 +28,7 @@ int buscaSeJaCursouDisciplina(char *discDigitada, AllAlunosDisc *allAlunosDisc, 
 	for(int a=0; a<allAlunosDisc->total; a++){
 		//printf("%d\n",a);
 		//printf("%s\n", discAndReqs->prerequisitos[a]->siglaMateria);
-		if(strcmp(discDigitada, allAlunosDisc->alunosDisciplinas[a]->sigla) == 0 && (allAlunosDisc->alunosDisciplinas[a]->ra && ra)){
+		if(strcmp(discDigitada, allAlunosDisc->alunosDisciplinas[a]->sigla) == 0 && (allAlunosDisc->alunosDisciplinas[a]->ra == ra)){
 			c = 1;
 		}
 	}

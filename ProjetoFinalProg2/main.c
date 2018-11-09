@@ -178,7 +178,7 @@ void CadastroDeAlunos(Alunos *alunos){
 void ConsultarDisciplinas(DiscAndReqs *discAndReqs){
 	int c = 0, avaliador=0;
 	char disciplina[5];
-	printf("Digite a disciplina: ");
+	printf("DIGITE A DISCIPLINA: ");
 	scanf("%s", &disciplina);
 	
 	Disciplina *disciplinaFinal = newDisciplina("", "", 0);//começa vazia para ser preenchida depois
@@ -186,9 +186,9 @@ void ConsultarDisciplinas(DiscAndReqs *discAndReqs){
 	disciplinaFinal = BuscaMateriaPelaSigla(disciplina, discAndReqs, disciplinaFinal);
 	
 	if(disciplinaFinal->credito > 0){
-		printf("\n\nNome: %s\n", disciplinaFinal->nome);
-		printf("Quantidade de Creditos: %d\n", disciplinaFinal->credito);
-		printf("Pre-requisitos:\n");
+		printf("\n\nNOME: %s\n", disciplinaFinal->nome);
+		printf("QUANTIDADE DE CREDITOS: %d\n", disciplinaFinal->credito);
+		printf("PRE-REQUISITOS:\n");
 		while(c<qtdPrereqs){
 			if(strcmp(disciplina, discAndReqs->prerequisitos[c]->siglaMateria) == 0){
 				for(int a=0;a<discAndReqs->totalDisci;a++){
@@ -271,13 +271,13 @@ void RealizarMatricula(DiscAndReqs *discAndReqs, AlunoLogado *alunoLogado, AllAl
 						cToSave++;
 					}else{
 						disciplinasNaoSalvas[cToNoSave] = newDisciplina(disciplinasParaValidar[t]->sigla, disciplinasParaValidar[t]->nome, disciplinasParaValidar[t]->credito);
-						printf("* Erro -> Voce nao possui 1 ou mais do requisitos da %s concluidos, verifique sua nota e faltas e tente novamente.\n\n", disciplinasNaoSalvas[cToNoSave]->sigla);
+						printf("* Erro -> VOCE NAO POSSUI 1 OU MAIS REQUISITOS DA %s CONCLUIDOS, \n\tVERIFIQUE SUA NOTA E FALTA E TENTE NOVAMENTE.\n\n", disciplinasNaoSalvas[cToNoSave]->sigla);
 						cToNoSave++;
 					}
 				}
 			}else{
 				disciplinasNaoSalvas[cToNoSave] = newDisciplina(disciplinasParaValidar[t]->sigla, disciplinasParaValidar[t]->nome, disciplinasParaValidar[t]->credito);
-				printf("* Erro -> Voce ja cursou essa Disciplina.\n\n", disciplinasNaoSalvas[cToNoSave]->sigla);
+				printf("* Erro -> VOCE JA CURSOU ESSA DISCIPLINA.\n\n", disciplinasNaoSalvas[cToNoSave]->sigla);
 				cToNoSave++;
 			}
 		}
@@ -309,30 +309,34 @@ void AtualizaNotaFalta(AlunoLogado *alunoLogado, AllAlunosDisc *allAlunosDisc, D
 	printf("DIGITE O SEMESTRE: ");
 	scanf("%d", &semestre);
 	
-	printaSituacaoNotasAluno(semestre, alunoLogado->ra, allAlunosDisc, discAndReqs);
+	int c = printaSituacaoNotasAluno(semestre, alunoLogado->ra, allAlunosDisc, discAndReqs);
 	
-	do{
-		printf("\nDIGITE O CODIGO DA DISCIPLINA PARA REALIZAR A ALTERACAO: ");
-		scanf("%s", discDigitada);
-		if(strcmp(discDigitada, "XX000") != 0){
-			if((verificaDisciplinaExisteNoSemestre(semestre, discDigitada, allAlunosDisc)) == 1){
-				printf("Nota: ");
-				scanf("%f", &nota);
-				printf("Falta (%): ");
-				scanf("%f", &falta);
-				
-				if((nota >10 || nota <0) || (falta >100 || falta <0)){
-					printf("\nNOTA E FALTA DEVEM SER DE 0 A 10 E 0 A 100, RESPECTIVAMENTE\n\n");
+	if(c > 0){
+		do{
+			printf("\nDIGITE O CODIGO DA DISCIPLINA PARA REALIZAR A ALTERACAO: ");
+			scanf("%s", discDigitada);
+			if(strcmp(discDigitada, "XX000") != 0){
+				if((verificaDisciplinaExisteNoSemestre(semestre, discDigitada, allAlunosDisc)) == 1){
+					printf("Nota: ");
+					scanf("%f", &nota);
+					printf("Falta (%): ");
+					scanf("%f", &falta);
+					
+					if((nota >10 || nota <0) || (falta >100 || falta <0)){
+						printf("\nNOTA E FALTA DEVEM SER DE 0 A 10 E 0 A 100, RESPECTIVAMENTE\n\n");
+					}else{
+						efetuaAlteracaoESalvaArquivo(semestre, discDigitada, allAlunosDisc, nota, falta, alunoLogado->ra);
+						printaSituacaoNotasAluno(semestre, alunoLogado->ra, allAlunosDisc, discAndReqs);
+							
+					}	
 				}else{
-					efetuaAlteracaoESalvaArquivo(semestre, discDigitada, allAlunosDisc, nota, falta, alunoLogado->ra);
-					printaSituacaoNotasAluno(semestre, alunoLogado->ra, allAlunosDisc, discAndReqs);
-						
-				}	
-			}else{
-				printf("\nMATRICULA NAO ENCONTRADA NO SEMESTRE DIGITADO.\n\n");
+					printf("\nMATRICULA NAO ENCONTRADA NO SEMESTRE DIGITADO.\n\n");
+				}
 			}
-		}
-	}while(strcmp(discDigitada, "XX000") != 0);
+		}while(strcmp(discDigitada, "XX000") != 0);
+	}else{
+		printf("NENHUMA MATRICULA ENCONTRADA NO SEMESTRE\n\n");
+	}
 }
 
 

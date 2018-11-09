@@ -9,7 +9,7 @@ void gravaAlunosArquivo(Alunos *alunos){
     	fprintf(fp,"%s\n",alunos->alunos[c]->senha);
 	}
 	fclose(fp);
-	printf("\n\nSalvo com sucesso!\n\n");
+	printf("\n\nSALVO COM SUCESSO!\n\n");
 }
 
 AlunoLogado *validaLoginAluno(char *usuario, char *senha, AlunoLogado *alunoLogado){

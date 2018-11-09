@@ -138,7 +138,8 @@ void efetuaMatriculaOuAlteracao(AllAlunosDisc *allAlunosDisc){
 	
 }
 
-void printaSituacaoNotasAluno(int semestre, int ra, AllAlunosDisc *allAlunosDisc, DiscAndReqs *discAndReqs){
+int printaSituacaoNotasAluno(int semestre, int ra, AllAlunosDisc *allAlunosDisc, DiscAndReqs *discAndReqs){
+	int c = 0;
 	Disciplina *disciplinaFinal = newDisciplina("", "", 0);//começa vazia para ser preenchida depois
 		printf("\n\n");
 			
@@ -146,8 +147,11 @@ void printaSituacaoNotasAluno(int semestre, int ra, AllAlunosDisc *allAlunosDisc
 		if(allAlunosDisc->alunosDisciplinas[j]->ra == ra && allAlunosDisc->alunosDisciplinas[j]->semestre == semestre){
 			disciplinaFinal = BuscaMateriaPelaSigla(allAlunosDisc->alunosDisciplinas[j]->sigla, discAndReqs, disciplinaFinal);
 			printf("%s - %s - Nota: %.2f - Falta: %.2f\n", allAlunosDisc->alunosDisciplinas[j]->sigla, disciplinaFinal->nome, allAlunosDisc->alunosDisciplinas[j]->nota, allAlunosDisc->alunosDisciplinas[j]->faltas);
+			c++;
 		}
 	}
+	
+	return c;
 }
 
 int verificaDisciplinaExisteNoSemestre(int semestre, char *discDigitada, AllAlunosDisc *allAlunosDisc){
