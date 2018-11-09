@@ -212,16 +212,16 @@ void RealizarMatricula(DiscAndReqs *discAndReqs, AlunoLogado *alunoLogado, AllAl
 	char discDigitada[6];
 	int c = 0, cToSave = 0, cToNoSave = 0, veSeCumpriuReqs = 0, semestreOk = 0, semestreAtual, semestre, somaCreditos = 0;
 	
-	printf("Para sair, digite XX000\n");
+	printf("PARA SAIR, DIGITE XX000\n\n\n");
 	
 	semestreAtual = verificaUltimoSemestreRegistrado(alunoLogado->ra, allAlunosDisc);
 	do{
 		//printf("Semestre Atual: %d\n", semestreAtual);
-		printf("Digite o semestre: ");
+		printf("DIGITE O SEMESTRE: ");
 		scanf("%d", &semestre);
 		
 		if(semestre <= semestreAtual){
-			printf("\n\nO SEMESTRE DIGITADO NAO CONDIZ COM O SEMESTRE MAIS ATUAL REGISTRADO NA BASE!\n");
+			printf("\n\nO SEMESTRE DIGITADO NAO CONDIZ COM O SEMESTRE MAIS ATUAL REGISTRADO NA BASE!\n\n");
 		}else{
 			semestreOk = 1;
 		}
@@ -229,7 +229,7 @@ void RealizarMatricula(DiscAndReqs *discAndReqs, AlunoLogado *alunoLogado, AllAl
 	   
 	do{
 		disciplinaFinal = newDisciplina("", "", 0); //começa vazia para ser preenchida depois
-		printf("Digite a disciplina: ");
+		printf("DIGITE A DISCIPLINA: ");
 		scanf("%s", &discDigitada);
 		
 		if(strcmp(discDigitada, "XX000") != 0){
@@ -240,13 +240,13 @@ void RealizarMatricula(DiscAndReqs *discAndReqs, AlunoLogado *alunoLogado, AllAl
 				somaCreditos += disciplinaFinal->credito;
 				c++;
 			}else{
-				printf("\n\nA DISCIPLINA DIGITADA NAO EXISTE!\n");
+				printf("\n\nA DISCIPLINA DIGITADA NAO EXISTE!\n\n");
 			}	
 		}
 	}while(strcmp(discDigitada, "XX000") != 0);
 	
 	if(somaCreditos > 32){
-		printf("\n\nA SOMA DOS CREDITOS DAS MATERIAS DIGITADAS E SUPERIOR A 32, NENHUMA MATERIA FOI SALVA!\n");
+		printf("\n\nA SOMA DOS CREDITOS DAS MATERIAS DIGITADAS E SUPERIOR A 32, NENHUMA MATERIA FOI SALVA!\n\n");
 	}else{
 		printf("\n\n");
 		for(int t=0;t<c;t++){
@@ -259,7 +259,7 @@ void RealizarMatricula(DiscAndReqs *discAndReqs, AlunoLogado *alunoLogado, AllAl
 			if(validaJaFeita == 0){
 				if(requisitos->qtdReqs == 0){
 					disciplinasParaSalvar[cToSave] = newDisciplina(disciplinasParaValidar[t]->sigla, disciplinasParaValidar[t]->nome, disciplinasParaValidar[t]->credito);
-					printf("* Salvando Matricula na Disciplina %s.\n", disciplinasParaSalvar[cToSave]->sigla);
+					printf("* Salvando Matricula na Disciplina %s.\n\n", disciplinasParaSalvar[cToSave]->sigla);
 					cToSave++;
 				}else if(requisitos->qtdReqs > 0){
 					veSeCumpriuReqs = verificaSeAlunoCumpriuRequisitosPorSigla(alunoLogado ,requisitos, allAlunosDisc); 
@@ -267,17 +267,17 @@ void RealizarMatricula(DiscAndReqs *discAndReqs, AlunoLogado *alunoLogado, AllAl
 					
 					if(veSeCumpriuReqs == 1){
 						disciplinasParaSalvar[cToSave] = newDisciplina(disciplinasParaValidar[t]->sigla, disciplinasParaValidar[t]->nome, disciplinasParaValidar[t]->credito);
-						printf("* Salvando Matricula na Disciplina %s.\n", disciplinasParaSalvar[cToSave]->sigla);
+						printf("* Salvando Matricula na Disciplina %s.\n\n", disciplinasParaSalvar[cToSave]->sigla);
 						cToSave++;
 					}else{
 						disciplinasNaoSalvas[cToNoSave] = newDisciplina(disciplinasParaValidar[t]->sigla, disciplinasParaValidar[t]->nome, disciplinasParaValidar[t]->credito);
-						printf("* Erro -> Voce nao possui 1 ou mais do requisitos da %s concluidos.\n", disciplinasNaoSalvas[cToNoSave]->sigla);
+						printf("* Erro -> Voce nao possui 1 ou mais do requisitos da %s concluidos, verifique sua nota e faltas e tente novamente.\n\n", disciplinasNaoSalvas[cToNoSave]->sigla);
 						cToNoSave++;
 					}
 				}
 			}else{
 				disciplinasNaoSalvas[cToNoSave] = newDisciplina(disciplinasParaValidar[t]->sigla, disciplinasParaValidar[t]->nome, disciplinasParaValidar[t]->credito);
-				printf("* Erro -> Voce ja cursou essa Disciplina.\n", disciplinasNaoSalvas[cToNoSave]->sigla);
+				printf("* Erro -> Voce ja cursou essa Disciplina.\n\n", disciplinasNaoSalvas[cToNoSave]->sigla);
 				cToNoSave++;
 			}
 		}
@@ -296,7 +296,7 @@ void RealizarMatricula(DiscAndReqs *discAndReqs, AlunoLogado *alunoLogado, AllAl
 	if(cToSave >= 1){
 		efetuaMatriculaOuAlteracao(allAlunosDisc);
 	}else{
-		printf("\n\nNENHUMA MATERIA FOI SALVA.\n");
+		printf("\n\nNENHUMA MATERIA FOI SALVA.\n\n");
 	}
 	
 }
@@ -306,7 +306,7 @@ void AtualizaNotaFalta(AlunoLogado *alunoLogado, AllAlunosDisc *allAlunosDisc, D
 	float nota, falta;
 	char discDigitada[5];
 	
-	printf("Digite o semestre: ");
+	printf("DIGITE O SEMESTRE: ");
 	scanf("%d", &semestre);
 	
 	printaSituacaoNotasAluno(semestre, alunoLogado->ra, allAlunosDisc, discAndReqs);
@@ -322,14 +322,14 @@ void AtualizaNotaFalta(AlunoLogado *alunoLogado, AllAlunosDisc *allAlunosDisc, D
 				scanf("%f", &falta);
 				
 				if((nota >10 || nota <0) || (falta >100 || falta <0)){
-					printf("\nNOTA E FALTA DEVEM SER DE 0 A 10 E 0 A 100, RESPECTIVAMENTE\n");
+					printf("\nNOTA E FALTA DEVEM SER DE 0 A 10 E 0 A 100, RESPECTIVAMENTE\n\n");
 				}else{
 					efetuaAlteracaoESalvaArquivo(semestre, discDigitada, allAlunosDisc, nota, falta, alunoLogado->ra);
 					printaSituacaoNotasAluno(semestre, alunoLogado->ra, allAlunosDisc, discAndReqs);
 						
 				}	
 			}else{
-				printf("\nMATRICULA NAO ENCONTRADA NO SEMESTRE DIGITADO.\n");
+				printf("\nMATRICULA NAO ENCONTRADA NO SEMESTRE DIGITADO.\n\n");
 			}
 		}
 	}while(strcmp(discDigitada, "XX000") != 0);

@@ -145,7 +145,7 @@ void printaSituacaoNotasAluno(int semestre, int ra, AllAlunosDisc *allAlunosDisc
 	for(int j=0;j<allAlunosDisc->total;j++){
 		if(allAlunosDisc->alunosDisciplinas[j]->ra == ra && allAlunosDisc->alunosDisciplinas[j]->semestre == semestre){
 			disciplinaFinal = BuscaMateriaPelaSigla(allAlunosDisc->alunosDisciplinas[j]->sigla, discAndReqs, disciplinaFinal);
-			printf("%s - %s - Nota: %f - Falta: %f\n", allAlunosDisc->alunosDisciplinas[j]->sigla, disciplinaFinal->nome, allAlunosDisc->alunosDisciplinas[j]->nota, allAlunosDisc->alunosDisciplinas[j]->faltas);
+			printf("%s - %s - Nota: %.2f - Falta: %.2f\n", allAlunosDisc->alunosDisciplinas[j]->sigla, disciplinaFinal->nome, allAlunosDisc->alunosDisciplinas[j]->nota, allAlunosDisc->alunosDisciplinas[j]->faltas);
 		}
 	}
 }
@@ -166,14 +166,14 @@ void efetuaAlteracaoESalvaArquivo(int semestre, char *discDigitada, AllAlunosDis
 			allAlunosDisc->alunosDisciplinas[k]->nota = nota;
 			allAlunosDisc->alunosDisciplinas[k]->faltas = falta;
 			
-			printf("[%s, %f, %f]\n", allAlunosDisc->alunosDisciplinas[k]->sigla, allAlunosDisc->alunosDisciplinas[k]->nota, allAlunosDisc->alunosDisciplinas[k]->faltas);
+			//printf("[%s, %f, %f]\n", allAlunosDisc->alunosDisciplinas[k]->sigla, allAlunosDisc->alunosDisciplinas[k]->nota, allAlunosDisc->alunosDisciplinas[k]->faltas);
 			break;
 		}
 	}	
-	
+	/*
 	for(int k=0;k<allAlunosDisc->total;k++){
 		printf("[%s, %f, %f]\n", allAlunosDisc->alunosDisciplinas[k]->sigla, allAlunosDisc->alunosDisciplinas[k]->nota, allAlunosDisc->alunosDisciplinas[k]->faltas);
-	}
+	}*/
 	
 	efetuaMatriculaOuAlteracao(allAlunosDisc);
 }
